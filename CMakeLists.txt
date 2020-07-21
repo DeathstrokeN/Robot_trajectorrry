@@ -1,0 +1,32 @@
+cmake_minimum_required(VERSION 3.10)
+
+# Project description
+project(
+    project-template
+    VERSION 1.0
+    DESCRIPTION "A Conan/CMake template project"
+    LANGUAGES CXX)
+
+# Set the build type to release if not specified by the user    
+if(NOT CMAKE_BUILD_TYPE)
+    set(CMAKE_BUILD_TYPE Release)
+endif()
+
+# Use conan to gather dependencies
+include(cmake/Conan.cmake)
+
+# Add static analyzers support
+include(cmake/StaticAnalyzers.cmake)
+
+option(ENABLE_TESTING "Enable test compilation" OFF)
+if(ENABLE_TESTING)
+    enable_testing()
+endif()
+
+# Process the src and apps directories
+add_subdirectory(src)
+add_subdirectory(apps)
+add_subdirectory(tests)
+
+# Force the generation of a compile_commands.json file to provide autocompletion for IDEs
+include(cmake/CompileCommands.cmake)
