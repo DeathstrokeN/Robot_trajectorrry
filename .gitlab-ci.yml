@@ -1,0 +1,12 @@
+image: conanio/gcc7
+
+before_script:
+  - export CONAN_V2_MODE=1
+  - cd build
+
+build:
+  script:
+    - cmake -DENABLE_TESTING=ON -DENABLE_CPPCHECK=ON ..
+    - cmake --build . --parallel
+    - ctest
+    - conan create .. umrob/testing

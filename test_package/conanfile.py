@@ -3,7 +3,7 @@ import os
 from conans import ConanFile, CMake, tools
 
 
-class UrdfdomcppTestConan(ConanFile):
+class ProjectTemplateTestConan(ConanFile):
     settings = "os", "compiler", "build_type", "arch"
     generators = "cmake"
 
