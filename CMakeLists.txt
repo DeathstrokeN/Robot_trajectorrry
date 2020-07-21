@@ -18,6 +18,9 @@ include(cmake/Conan.cmake)
 # Add static analyzers support
 include(cmake/StaticAnalyzers.cmake)
 
+# Add code coverage support
+include(cmake/Coverage.cmake)
+
 option(ENABLE_TESTING "Enable test compilation" OFF)
 if(ENABLE_TESTING)
     enable_testing()

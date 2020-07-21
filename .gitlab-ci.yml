@@ -1,12 +1,15 @@
 image: conanio/gcc7
 
 before_script:
+  - sudo apt update
+  - sudo apt install -y lcov
   - export CONAN_V2_MODE=1
   - cd build
 
 build:
   script:
-    - cmake -DENABLE_TESTING=ON -DENABLE_CPPCHECK=ON ..
+    - conan create .. umrob/testing
+    - cmake -DENABLE_TESTING=ON -DENABLE_CPPCHECK=ON -DENABLE_LCOV=ON ..
     - cmake --build . --parallel
     - ctest
-    - conan create .. umrob/testing
+    - cmake --build . --target coverage
