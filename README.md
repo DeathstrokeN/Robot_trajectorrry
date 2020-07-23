@@ -17,4 +17,5 @@ From the `build` folder:
 ## Tips and tricks
 * When you add new source files, don't forget to list them in the corresponding `CMakeLists.txt` file otherwise they won't be built
 * If your IDE doesn't automatically format your code, you can run the `format.sh` script at the root of the project to do so
+* To enforce good coding practice, the compiler is configured to generate more warnings and to treat all warnings as errors. Both of these aspects can be disabled using the `MORE_WARNINGS` and `WARNINGS_AS_ERRORS` CMake options.
 * If a test fails, you can find its console output in `build/Testing/Temporary/LastTest.log`. Alternatively, you can run the test manually, e.g `./bin/my_test`. You can pass the `-s` option after the executable name to list successful tests

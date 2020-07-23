@@ -21,6 +21,9 @@ include(cmake/StaticAnalyzers.cmake)
 # Add code coverage support
 include(cmake/Coverage.cmake)
 
+# Add optional compiler options
+include(cmake/CompilerOptions.cmake)
+
 option(ENABLE_TESTING "Enable test compilation" OFF)
 if(ENABLE_TESTING)
     enable_testing()

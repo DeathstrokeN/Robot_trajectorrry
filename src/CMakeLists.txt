@@ -10,6 +10,8 @@ target_include_directories(hello PUBLIC ${CMAKE_SOURCE_DIR}/include)
 
 target_compile_features(hello PUBLIC cxx_std_11)
 
+add_warnings(hello)
+
 # Keep converage_config for coverage reports
 target_link_libraries(hello PUBLIC coverage_config CONAN_PKG::fmt)
 
