@@ -21,6 +21,9 @@ include(cmake/StaticAnalyzers.cmake)
 # Add code coverage support
 include(cmake/Coverage.cmake)
 
+# Add code coverage support
+include(cmake/Doxygen.cmake)
+
 # Add optional compiler options
 include(cmake/CompilerOptions.cmake)
 
