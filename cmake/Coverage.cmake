@@ -30,6 +30,7 @@ option(ENABLE_LCOV "Enable coverage reporting using lcov" OFF)
     COMMAND ${LCOV} --capture --directory . --output-file coverage.info
     COMMAND ${LCOV} --remove coverage.info '/usr/*' --output-file coverage.info
     COMMAND ${LCOV} --remove coverage.info '$ENV{HOME}/.conan/*' --output-file coverage.info
+    COMMAND ${LCOV} --remove coverage.info '${CMAKE_SOURCE_DIR}/tests/*' --output-file coverage.info
     COMMAND ${LCOV} --list coverage.info
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
   )
