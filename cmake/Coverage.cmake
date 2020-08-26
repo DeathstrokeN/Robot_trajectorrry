@@ -3,12 +3,19 @@
 add_library(coverage_config INTERFACE)
 
 option(ENABLE_LCOV "Enable coverage reporting using lcov" OFF)
-  if(ENABLE_LCOV AND CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
-    find_program(LCOV lcov)
-    if(LCOV)
-      message("lcov finished setting up.")
-    else()
-      message(SEND_ERROR "lcov requested but executable not found.")
+if(ENABLE_LCOV AND CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+  find_program(LCOV lcov)
+  if(LCOV)
+    message("lcov finished setting up.")
+  else()
+    message(SEND_ERROR "lcov requested but executable not found.")
+  endif()
+
+  find_program(GENHTML genhtml)
+  if(GENHTML)
+    set(GENHTML_ARGS "-o;coverage;coverage.info")
+  else()
+    message("genhtml not found in PATH, disabling HTML coverage report generation")
   endif()
 
   # Add required flags (GCC & LLVM/Clang)
@@ -32,6 +39,7 @@ option(ENABLE_LCOV "Enable coverage reporting using lcov" OFF)
     COMMAND ${LCOV} --remove coverage.info '$ENV{HOME}/.conan/*' --output-file coverage.info
     COMMAND ${LCOV} --remove coverage.info '${CMAKE_SOURCE_DIR}/tests/*' --output-file coverage.info
     COMMAND ${LCOV} --list coverage.info
+    COMMAND ${GENHTML} ${GENHTML_ARGS}
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
   )
 endif()
