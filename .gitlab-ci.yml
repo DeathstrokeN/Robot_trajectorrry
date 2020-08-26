@@ -2,7 +2,7 @@ image: conanio/gcc7
 
 before_script:
   - sudo apt update
-  - sudo apt install -y lcov
+  - sudo apt install -y lcov doxygen
   - export CONAN_V2_MODE=1
   - cd build
 
