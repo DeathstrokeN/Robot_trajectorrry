@@ -1,11 +1,30 @@
-# CMake/Conan project template
+# robot-trajectory project
 
-## How to use this template
-1. Copy it and rename it as your project's name
-2. Edit `CMakeLists.txt` and `conanfile.py` to edit the project's name, version, dependencies, etc.
-3. Edit the content of `src` and `include` with your library/libraries
-4. Edit the content of `test` to add unit tests for your library
-5. Edit the content of `apps` to create at least one example application showing how to use the library
+This project provides a library to compute trajectories in Cartesian space.
+
+## Objective
+
+Using the [Eigen](eigen.tuxfamily.org/) (linear algebra) librarie, implement the algorithms required to compute Cartesian space trajectories composed of multiple waypoints with velocity/acceleration or time constraints between them. 
+
+A code skeleton is provided. Fill all functions inside *src/robot_trajectory/{polynomial,trajectory_generator}.cpp* that are tagged with a `//TODO implement` comment. While implementing a function, remove any `[[maybe_unused]]` attribute as they are present only to avoid warnings.
+
+You must **not** modify the existing `Polynomial` and `TrajectoryGenerator` classes public interfaces (functions, variables, types), but you are free to add any member function or variable. This makes sure that all unit tests in *tests/trajectory/{polynomial,trajectory}.cpp* can be compiled without any modification. If you add new public member functions, please try to add unit tests for them.
+
+For simplification, consider that the velocities and accelerations at the waypoints are zero and that all six components are synchronized at each waypoint (the longest one dictate the duration of the other ones).
+
+## Bonus objective
+
+If you managed to complete everything that is listed above in time, you can try to generalize the approach by considering non-zero velocities and accelerations at the waypoints and different synchronization strategies. Each point can be implemented separately.
+
+1. In contrast with null velocities and accelerations at the waypoints, the general case doesn't have an explicit solution for the minimum duration required to respect the velocity and acceleration limits. An iterative algorithm has to be implemented to find such minimum time.
+
+2. The waypoint synchronization is one of different ways to synchronize the six components of the trajectory:
+   1.  Whole trajectory synchronization: the only synchronization point is at the final waypoint. This can lead to shorter trajectories if synchronization at the waypoint level is not required
+   2.  No synchronization: all components take the shortest amount of time to complete. This leads to the shortest possible trajectories if no sort of synchronization is required.
+
+Refer to *docs/trajectory_generation.pdf* for the equations to implement these two strategies.
+
+A successful implementation of either or both of these strategies will grant you bonus points.
 
 ## How to build and test the code
 From the `build` folder:
