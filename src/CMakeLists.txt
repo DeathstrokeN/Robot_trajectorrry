@@ -1,22 +1,29 @@
 # List all the source files composing the library
-set(hello_FILES 
-    hello/hello.cpp
+set(robot_trajectory_FILES 
+    robot_trajectory/polynomial.cpp
+    robot_trajectory/trajectory_generator.cpp
 )
 
 # will be a shared or static library depending on BUILD_SHARED_LIBS
-add_library(hello ${hello_FILES})
+add_library(robot_trajectory ${robot_trajectory_FILES})
 
-target_include_directories(hello PUBLIC ${CMAKE_SOURCE_DIR}/include)
+target_include_directories(robot_trajectory PUBLIC ${CMAKE_SOURCE_DIR}/include)
 
-target_compile_features(hello PUBLIC cxx_std_11)
+target_compile_features(robot_trajectory PUBLIC cxx_std_17)
 
-add_warnings(hello)
+add_warnings(robot_trajectory)
 
 # Keep converage_config for coverage reports
-target_link_libraries(hello PUBLIC coverage_config CONAN_PKG::fmt)
+target_link_libraries(
+    robot_trajectory 
+    PUBLIC 
+        CONAN_PKG::fmt
+        CONAN_PKG::eigen-extensions
+        coverage_config 
+)
 
 install(
-    TARGETS hello
+    TARGETS robot_trajectory
     LIBRARY DESTINATION lib
     ARCHIVE DESTINATION lib
     RUNTIME DESTINATION bin

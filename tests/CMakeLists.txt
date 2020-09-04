@@ -4,13 +4,14 @@ if(ENABLE_TESTING)
     target_link_libraries(test_main PUBLIC CONAN_PKG::catch2)
 
     # List all the source files composing the tests
-    set(hello_test_FILES 
-        hello/greeter.cpp
+    set(trajectory_test_FILES 
+        trajectory/polynomial.cpp
+        trajectory/trajectory.cpp
     )
 
-    add_executable(hello_test ${hello_test_FILES})
+    add_executable(trajectory_test ${trajectory_test_FILES})
 
-    target_link_libraries(hello_test PUBLIC test_main hello)
+    target_link_libraries(trajectory_test PUBLIC test_main robot_trajectory)
 
-    add_test(NAME hello-test COMMAND hello_test)
+    add_test(NAME trajectory-test COMMAND trajectory_test)
 endif()

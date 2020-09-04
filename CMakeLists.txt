@@ -2,9 +2,9 @@ cmake_minimum_required(VERSION 3.10)
 
 # Project description
 project(
-    project-template
+    robot-trajectory
     VERSION 1.0
-    DESCRIPTION "A Conan/CMake template project"
+    DESCRIPTION "Compute a cartesian space trajectory for a robot"
     LANGUAGES CXX)
 
 # Set the build type to release if not specified by the user    

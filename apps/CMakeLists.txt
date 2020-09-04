@@ -1,2 +1,2 @@
-add_executable(greeter ${CMAKE_CURRENT_SOURCE_DIR}/greeter/main.cpp)
-target_link_libraries(greeter PUBLIC hello)
+add_executable(trajectory_generator ${CMAKE_CURRENT_SOURCE_DIR}/trajectory_generator/main.cpp)
+target_link_libraries(trajectory_generator PUBLIC robot_trajectory)

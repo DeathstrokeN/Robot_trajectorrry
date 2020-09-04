@@ -1,27 +1,26 @@
 from conans import ConanFile, CMake, tools
 
 
-class ProjectTemplateConan(ConanFile):
-    name = "project-template"
+class RobotTrajectoryConan(ConanFile):
+    name = "robot-trajectory"
     version = "1.0"
     license = "BSD"
-    author = "Your name <your@email.com>"
+    author = "Benjamin Navarro <navarro.benjamin13@gmail.com>"
     url = "you-git-project-homepage.com"
-    description = "A Conan/CMake template project"
-    topics = "C++", "Conan", "CMake"  # add/modify topics
+    description = "Compute a cartesian space trajectory for a robot"
+    topics = "C++", "Conan", "CMake", "Trajectory Generation", "Polynomial"
     settings = "os", "compiler", "build_type", "arch"
     options = {"shared": [True, False], "fPIC": [
         True, False], "build_tests": [True, False]}
     default_options = {"shared": False, "fPIC": True, "build_tests": False}
     generators = "cmake"
-    requires = "fmt/7.0.1"  # add/modify dependencies if needed
+    requires = "fmt/7.0.1", "eigen-extensions/0.13.2@bnavarro/testing"
     exports_sources = "!.clangd*", "!.ccls-cache*", "!compile_commands.json", "*"
 
     def requirements(self):
         if self.options.build_tests:
             self.requires("cppcheck_installer/2.0@bincrafters/stable")
             self.requires("catch2/2.13.0")
-            # add test dependencies here if needed
 
     def configure(self):
         if self.settings.compiler == 'Visual Studio':
@@ -46,4 +45,4 @@ class ProjectTemplateConan(ConanFile):
         self.copy("*.a", dst="lib", keep_path=False)
 
     def package_info(self):
-        self.cpp_info.libs = ["hello"]
+        self.cpp_info.libs = ["robot_trajectory"]
