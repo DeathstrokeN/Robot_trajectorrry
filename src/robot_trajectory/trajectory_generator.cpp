@@ -6,20 +6,20 @@
 
 namespace umrob {
 
-TrajectoryGenerator::Segment::Segment(
-    [[maybe_unused]] const Eigen::Vector6d& max_velocity,
-    [[maybe_unused]] const Eigen::Vector6d& max_acceleration) {
-    // TODO implement
+TrajectoryGenerator::Segment::Segment(const Eigen::Vector6d& max_velocity,
+                                      const Eigen::Vector6d& max_acceleration)
+    : max_velocity{max_velocity}, max_acceleration{max_acceleration} {
 }
 
 TrajectoryGenerator::TrajectoryGenerator(double time_step)
     : time_step_{time_step} {
-    // TODO implement
+    reset();
 }
 
-void TrajectoryGenerator::startFrom([
-    [maybe_unused]] const Eigen::Affine3d& pose) {
-    // TODO implement
+void TrajectoryGenerator::startFrom(const Eigen::Affine3d& pose) {
+    reset();
+    last_waypoint_ = pose;
+    target_pose_ = pose;
 }
 
 void TrajectoryGenerator::addWaypoint(
@@ -36,8 +36,32 @@ void TrajectoryGenerator::addWaypoint(
 }
 
 TrajectoryGenerator::State TrajectoryGenerator::update() {
-    // TODO implement
-    return State::Idle;
+    if (state_ == State::TrajectoryCompleted) {
+        return state_;
+    } else {
+        state_ = State::ReachingWaypoint;
+    }
+
+    auto evaluate = [this]() {
+        Eigen::Vector6d next_pose_vec;
+
+        // TODO evaluate the polynomial and its derivatives into next_pose_vec,
+        // target_velocity_ and target_acceleration_
+
+        target_pose_.translation() = next_pose_vec.head<3>();
+        target_pose_.linear() =
+            Eigen::Quaterniond::fromAngles(next_pose_vec.tail<3>())
+                .toRotationMatrix();
+    };
+
+    evaluate();
+
+    currentSegment().current_time += time_step_;
+    if (currentSegment().current_time > currentSegment().duration) {
+        // TODO switch to next segment and re-evaluate if needed
+    }
+
+    return state_;
 }
 
 const Eigen::Affine3d& TrajectoryGenerator::targetPose() const {
@@ -62,19 +86,32 @@ double TrajectoryGenerator::duration() const {
 }
 
 void TrajectoryGenerator::reset() {
-    // TODO implement
+    state_ = State::Idle;
+    last_waypoint_.setIdentity();
+    segments_.clear();
+    current_segment_idx_ = 0;
+
+    target_pose_ = last_waypoint_;
+    target_velocity_.setZero();
+    target_acceleration_.setZero();
 }
 
-void TrajectoryGenerator::setSegmentConstraints(
-    const Eigen::Affine3d& from, const Eigen::Affine3d& to,
-    [[maybe_unused]] Segment& segment) {
+void TrajectoryGenerator::setSegmentConstraints(const Eigen::Affine3d& from,
+                                                const Eigen::Affine3d& to,
+                                                Segment& segment) {
     Eigen::Vector6d from_vec, to_vec;
     from_vec << from.translation(),
         Eigen::Quaterniond(from.linear()).getAngles();
     to_vec << to.translation(), Eigen::Quaterniond(to.linear()).getAngles();
 
-    // TODO implement (use from_vec and to_vec for the initial and final
-    // position values)
+    for (size_t i = 0; i < 6; i++) {
+        auto& poly = segment.polynomials[i];
+        auto& cstr = poly.constraints();
+        cstr.xi = 0;
+        cstr.xf = 0;
+        cstr.yi = from_vec(i);
+        cstr.yf = to_vec(i);
+    }
 }
 
 //! Tmin_vel = 30Δy/16vmax
@@ -86,7 +123,7 @@ void TrajectoryGenerator::computeSegmentDuration([
 
 void TrajectoryGenerator::computeSegmentParameters([
     [maybe_unused]] Segment& segment) {
-    // TODO implement
+    // TODO compute the polynomials coefficients for the current duration
 }
 
 TrajectoryGenerator::Segment& TrajectoryGenerator::currentSegment() {
