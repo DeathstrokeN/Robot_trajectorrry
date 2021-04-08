@@ -19,7 +19,7 @@ class RobotTrajectoryConan(ConanFile):
 
     def requirements(self):
         if self.options.build_tests:
-            self.requires("cppcheck_installer/2.0@bincrafters/stable")
+            self.requires("cppcheck/2.4.1")
             self.requires("catch2/2.13.0")
 
     def configure(self):

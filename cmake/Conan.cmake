@@ -9,12 +9,7 @@ include(${CMAKE_BINARY_DIR}/conan.cmake)
   
 conan_add_remote(
     NAME bnavarro
-    URL https://api.bintray.com/conan/benjaminnavarro/bnavarro
-)
-
-conan_add_remote(
-    NAME public-conan
-    URL https://api.bintray.com/conan/bincrafters/public-conan
+    URL https://bnavarro.jfrog.io/artifactory/api/conan/bnavarro 
 )
 
 if(ENABLE_TESTING)
