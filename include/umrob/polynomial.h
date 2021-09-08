@@ -42,7 +42,8 @@ public:
 
     //! \brief Evaluate the polynomial for the given input
     //!
-    //! If x is outside the [xi,xf] range, will be either yi or yf
+    //! If x is outside the [xi,xf] range, the output will be either yi or yf
+    //! depending on which limit is crossed
     //!
     //! \param x Input value
     //! \return double Output value
@@ -50,7 +51,8 @@ public:
 
     //! \brief Evaluate the polynomial first derivative for the given input
     //!
-    //! If x is outside the [xi,xf] range, will be either dyi or dyf
+    //! If x is outside the [xi,xf] range, the output will be either dyi or dyf
+    //! depending on which limit is crossed
     //!
     //! \param x Input value
     //! \return double First output derivative
@@ -58,7 +60,8 @@ public:
 
     //! \brief Evaluate the polynomial second derivative for the given input
     //!
-    //! If x is outside the [xi,xf] range, will be either d2yi or d2yf
+    //! If x is outside the [xi,xf] range, the output will be either d2yi or
+    //! d2yf depending on which limit is crossed
     //!
     //! \param x Input value
     //! \return double Second output derivative

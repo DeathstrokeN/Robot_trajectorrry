@@ -13,15 +13,17 @@
 #include <vector>
 
 namespace Eigen {
+//! \brief Typedef for a six dimensional column vector
 using Vector6d = Eigen::Matrix<double, 6, 1>;
-}
+} // namespace Eigen
 
 namespace umrob {
 
 //! \brief Cartesian space trajectory generator
 //!
-//! The trajectory can be built using multiple segment and each segment is
-//! either velocity/acceleration or time constrained
+//! The trajectory can be built using multiple waypoints and each segment, i.e
+//! path between two waypoints, is either constrained by maximum velocities and
+//! accelerations or a fixed completion time
 //!
 class TrajectoryGenerator {
 public:
@@ -37,7 +39,7 @@ public:
     //! \brief Construct a trajectory generator using the given time step
     //!
     //! \param time_step The update time step, in seconds
-    TrajectoryGenerator(double time_step);
+    explicit TrajectoryGenerator(double time_step);
 
     //! \brief Reset the trajectory and set its starting point.
     //!
