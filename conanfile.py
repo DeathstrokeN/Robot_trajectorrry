@@ -14,7 +14,7 @@ class RobotTrajectoryConan(ConanFile):
         True, False], "build_tests": [True, False]}
     default_options = {"shared": False, "fPIC": True, "build_tests": False}
     generators = "cmake"
-    requires = "fmt/7.0.1", "eigen-extensions/0.13.2@bnavarro/testing"
+    requires = "fmt/7.0.1", "eigen-extensions/0.13.2@bnavarro/stable"
     exports_sources = "!.clangd*", "!.ccls-cache*", "!compile_commands.json", "*"
 
     def requirements(self):
