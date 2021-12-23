@@ -1,3 +1,4 @@
+@DeathstrokeN, BELLILA Ahmed Nassim
 # robot-trajectory project
 
 This project provides a library to compute trajectories in Cartesian space.
