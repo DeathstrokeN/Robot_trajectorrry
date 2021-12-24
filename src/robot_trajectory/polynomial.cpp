@@ -45,8 +45,7 @@ double Polynomial::evaluate([[maybe_unused]] double x) {
         y = constraints_.yi;
     else if(constraints_.xf<constraints_.xi && x<constraints_.xi)
         y = constraints_.yi;
-	
-    else
+	else	
 		y = coefficients_.a*pow(x,5) + coefficients_.b*pow(x,4) + coefficients_.c*pow(x,3) + coefficients_.d*pow(x,2) + coefficients_.e*x + coefficients_.f;
     
 	
