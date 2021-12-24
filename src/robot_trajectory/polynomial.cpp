@@ -21,6 +21,14 @@ const Polynomial::Constraints& Polynomial::constraints() const {
  */
 void Polynomial::computeCoefficients() {
     // TODO implement
+	double dx = constraints_.xf-constraints_.xi;
+	constraints_.xi = 0;
+	coefficients_.a = -(12*constraints_.yi - 12*constraints_.yf+6*dx*constraints_.dyf+6*dx*constraints_.dyi-constraints_.d2yf*dx*dx+constraints_.d2yi*dx*dx)/(2*pow(dx,5));
+	coefficients_.b = (30*constraints_.yi - 30*constraints_.yf+14*dx*constraints_.dyf+16*dx*constraints_.dyi-2*constraints_.d2yf*dx*dx+3*constraints_.d2yi*dx*dx)/(2*pow(dx,4));
+	coefficients_.c = -(20*constraints_.yi - 20*constraints_.yf+8*dx*constraints_.dyf+12*dx*constraints_.dyi-constraints_.d2yf*dx*dx+3*constraints_.d2yi*dx*dx)/(2*pow(dx,3));
+	coefficients_.d = constraints_.d2yi/2;
+	coefficients_.e = constraints_.dyi;
+	coefficients_.f = constraints_.yi;
 }
 // clang-format on
 
