@@ -23,10 +23,18 @@ void TrajectoryGenerator::startFrom(const Eigen::Affine3d& pose) {
 }
 
 void TrajectoryGenerator::addWaypoint(
-    [[maybe_unused]] const Eigen::Affine3d& pose,
-    [[maybe_unused]] const Eigen::Vector6d& max_velocity,
-    [[maybe_unused]] const Eigen::Vector6d& max_acceleration) {
+    const Eigen::Affine3d& pose,
+    const Eigen::Vector6d& max_velocity,
+    const Eigen::Vector6d& max_acceleration) {
     // TODO implement
+    target_pose_ = pose;
+    target_velocity_ = max_velocity;
+    target_acceleration_ = max_acceleration;
+    currentSegment().max_velocity = max_velocity;
+    currentSegment().max_acceleration = max_acceleration;
+    computeSegmentDuration(currentSegment()); 
+    computeSegmentParameters(currentSegment()); 
+    current_segment_idx_++;
 }
 
 void TrajectoryGenerator::addWaypoint(
