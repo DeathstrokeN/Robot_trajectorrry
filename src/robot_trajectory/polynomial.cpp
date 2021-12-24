@@ -35,18 +35,60 @@ void Polynomial::computeCoefficients() {
 //! y = ax^5 + bx^4 + cx^3 + dx^2 + ex + f
 double Polynomial::evaluate([[maybe_unused]] double x) {
     // TODO implement
-    return 0;
+	double y;
+	
+    if (constraints_.xf>constraints_.xi && x<constraints_.xi)
+		y=constraints_.yi;
+    else if(constraints_.xf>constraints_.xi && x>constraints_.xf)
+        y=constraints_.yf;
+    else if(constraints_.xf<constraints_.xi && x>constraints_.xi)
+        y=constraints_.yi;
+    else if(constraints_.xf<constraints_.xi && x<constraints_.xi)
+        y=constraints_.yi;
+	
+    else
+		y=coefficients_.a*pow(x,5)+ coefficients_.b*pow(x,4) + coefficients_.c*pow(x,3) + coefficients_.d*pow(x,2) + coefficients_.e*x + coefficients_.f;
+    
+	
+	return y;
 }
 
 //! dy = 5ax^4 + 4bx^3 + 3cx^2 + 2dx + e
 double Polynomial::evaluateFirstDerivative([[maybe_unused]] double x) {
     // TODO implement
-    return 0;
+	double dy;
+	
+    if (constraints_.xf>constraints_.xi && x<constraints_.xi)
+        dy=constraints_.yi;
+    else if(constraints_.xf>constraints_.xi && x>constraints_.xf)
+        dy=constraints_.yf;
+    else if(constraints_.xf<constraints_.xi && x>constraints_.xi)
+        dy=constraints_.yi;
+    else if(constraints_.xf<constraints_.xi && x<constraints_.xi)
+        dy=constraints_.yi;
+    
+	else
+    dy=5*coefficients_.a*pow(x,4)+ 4*coefficients_.b*pow(x,3) + 3*coefficients_.c*pow(x,2) + coefficients_.d*pow(x,2) + coefficients_.e;
+
+	return dy;
 }
 
 //! d2y = 20ax^3 + 12bx^2 + 6cx + 2d
 double Polynomial::evaluateSecondDerivative([[maybe_unused]] double x) {
-    return 0;
+	double d2y;
+    if (constraints_.xf>constraints_.xi && x<constraints_.xi)
+        d2y=constraints_.yi;
+    else if(constraints_.xf>constraints_.xi && x>constraints_.xf)
+        d2y=constraints_.yf;
+    else if(constraints_.xf<constraints_.xi && x>constraints_.xi)
+		d2y=constraints_.yi;
+    else if(constraints_.xf<constraints_.xi && x<constraints_.xi)
+        d2y=constraints_.yi;
+    
+	else
+    d2y=20*coefficients_.a*pow(x,3)+ 12*coefficients_.b*pow(x,2) + 6*coefficients_.c*x + coefficients_.d*2;
+
+	return d2y;
 }
 
 } // namespace umrob
