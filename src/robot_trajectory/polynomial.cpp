@@ -1,4 +1,7 @@
 #include <umrob/polynomial.h>
+#include <math.h>
+#include <iostream>
+
 
 namespace umrob {
 
@@ -32,8 +35,14 @@ void Polynomial::computeCoefficients() {
 }
 // clang-format on
 
+double Polynomial::deltaY(){
+    double DY;
+    DY = constraints_.yf-constraints_.yi;
+    return DY;
+}
+
 //! y = ax^5 + bx^4 + cx^3 + dx^2 + ex + f
-double Polynomial::evaluate([[maybe_unused]] double x) {
+double Polynomial::evaluate( double x) {
     // TODO implement
 	double y;
 	
@@ -53,7 +62,7 @@ double Polynomial::evaluate([[maybe_unused]] double x) {
 }
 
 //! dy = 5ax^4 + 4bx^3 + 3cx^2 + 2dx + e
-double Polynomial::evaluateFirstDerivative([[maybe_unused]] double x) {
+double Polynomial::evaluateFirstDerivative(double x) {
     // TODO implement
 	double dy;
 	
@@ -73,7 +82,7 @@ double Polynomial::evaluateFirstDerivative([[maybe_unused]] double x) {
 }
 
 //! d2y = 20ax^3 + 12bx^2 + 6cx + 2d
-double Polynomial::evaluateSecondDerivative([[maybe_unused]] double x) {
+double Polynomial::evaluateSecondDerivative(double x) {
 	double d2y;
     if (constraints_.xf>constraints_.xi && x<constraints_.xi)
         d2y = constraints_.yi;

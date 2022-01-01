@@ -1,8 +1,10 @@
-#include <umrob/trajectory_generator.h>
-
+#include "umrob/trajectory_generator.h"
 #include <fmt/format.h>
-
 #include <numeric>
+#include <math.h>
+#include <umrob/polynomial.h>
+#include <iostream>
+
 
 namespace umrob {
 
@@ -67,7 +69,7 @@ TrajectoryGenerator::State TrajectoryGenerator::update() {
 				next_pose_vec(p) = poly.evaluate(p);
 				target_velocity_(p) =poly.evaluateFirstDerivative(p);
 				target_acceleration_(p)=poly.evaluateSecondDerivative(p);
-				state_==State::ReachingWaypoint;
+				state_ = State::ReachingWaypoint;
             }
         }
 
@@ -83,10 +85,10 @@ TrajectoryGenerator::State TrajectoryGenerator::update() {
     if (currentSegment().current_time > currentSegment().duration) {
         // TODO switch to next segment and re-evaluate if needed
 		current_segment_idx_++;
-		state_ == State::WaypointReached;
+		state_ = State::WaypointReached;
     }
-	else if (currentSegment().current_time = duration()) {
-        state_ == State::TrajectoryCompleted;
+	else if (currentSegment().current_time == duration()) {
+        state_ = State::TrajectoryCompleted;
         current_segment_idx_=0;
     }
 	else{
@@ -157,7 +159,7 @@ void TrajectoryGenerator::setSegmentConstraints(const Eigen::Affine3d& from,
 
 //! Tmin_vel = 30Δy/16vmax
 //! Tmin_acc = sqrt(10sqrt(3)Δy/3amax)
-void TrajectoryGenerator::computeSegmentDuration([Segment& segment) {
+void TrajectoryGenerator::computeSegmentDuration(Segment& segment) {
     // TODO implement
 	Eigen::Vector6d Tmin_vel;
     Eigen::Vector6d Tmin_acc;
@@ -168,7 +170,7 @@ void TrajectoryGenerator::computeSegmentDuration([Segment& segment) {
 		deltaY = segment.polynomials[i].deltaY();
 		Tmin_vel(i) = (30*deltaY)/(16*segment.max_velocity(i));
 		Tmin_acc(i) = sqrt((10*sqrt(3)*(deltaY)/(3*segment.max_acceleration(i))));
-		maxTemp(i) = max(Tmin_acc(i),Tmin_vel(i));
+		maxTemp(i) = std::max(Tmin_acc(i),Tmin_vel(i));
 		segment.duration = maxTemp.MaxColsAtCompileTime; 
     }
 }
