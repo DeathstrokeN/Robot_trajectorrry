@@ -38,9 +38,14 @@ void TrajectoryGenerator::addWaypoint(
 }
 
 void TrajectoryGenerator::addWaypoint(
-    [[maybe_unused]] const Eigen::Affine3d& pose,
-    [[maybe_unused]] double duration) {
+    const Eigen::Affine3d& pose,
+    double duration) {
     // TODO implement
+	
+	target_pose_=pose;
+    currentSegment().duration=duration;
+    computeSegmentParameters(currentSegment());
+    current_segment_idx_++;
 }
 
 TrajectoryGenerator::State TrajectoryGenerator::update() {
@@ -55,6 +60,16 @@ TrajectoryGenerator::State TrajectoryGenerator::update() {
 
         // TODO evaluate the polynomial and its derivatives into next_pose_vec,
         // target_velocity_ and target_acceleration_
+		for (size_t  p=0; p<6; p++){
+			auto& poly = currentSegment().polynomials[p];
+			
+			for(int p=0 ; p<currentSegment().duration ; p+=time_step_){	
+				next_pose_vec(p) = poly.evaluate(p);
+				target_velocity_(p) =poly.evaluateFirstDerivative(p);
+				target_acceleration_(p)=poly.evaluateSecondDerivative(p);
+				state_==State::ReachingWaypoint;
+            }
+        }
 
         target_pose_.translation() = next_pose_vec.head<3>();
         target_pose_.linear() =
@@ -67,7 +82,17 @@ TrajectoryGenerator::State TrajectoryGenerator::update() {
     currentSegment().current_time += time_step_;
     if (currentSegment().current_time > currentSegment().duration) {
         // TODO switch to next segment and re-evaluate if needed
+		current_segment_idx_++;
+		state_ == State::WaypointReached;
     }
+	else if (currentSegment().current_time = duration()) {
+        state_ == State::TrajectoryCompleted;
+        current_segment_idx_=0;
+    }
+	else{
+        state_ = State::ReachingWaypoint;
+    }
+	
 
     return state_;
 }
@@ -90,7 +115,15 @@ TrajectoryGenerator::State TrajectoryGenerator::state() const {
 
 double TrajectoryGenerator::duration() const {
     // TODO implement
-    return 0;
+    double durationFinal=0;
+    double *nombrSegm;
+    nombrSegm = new double[current_segment_idx_];
+
+    for (size_t i(0); i<current_segment_idx_; i++ ){
+	   nombrSegm[i]=segments_.at(current_segment_idx_).duration;
+	   durationFinal=durationFinal+nombrSegm[i];
+	}
+    return durationFinal;
 }
 
 void TrajectoryGenerator::reset() {
@@ -124,14 +157,31 @@ void TrajectoryGenerator::setSegmentConstraints(const Eigen::Affine3d& from,
 
 //! Tmin_vel = 30Δy/16vmax
 //! Tmin_acc = sqrt(10sqrt(3)Δy/3amax)
-void TrajectoryGenerator::computeSegmentDuration([
-    [maybe_unused]] Segment& segment) {
+void TrajectoryGenerator::computeSegmentDuration([Segment& segment) {
     // TODO implement
+	Eigen::Vector6d Tmin_vel;
+    Eigen::Vector6d Tmin_acc;
+    Eigen::Vector6d maxTemp;
+    double deltaY;
+   
+    for (int i = 0; i < 6; i++) {
+		deltaY = segment.polynomials[i].deltaY();
+		Tmin_vel(i) = (30*deltaY)/(16*segment.max_velocity(i));
+		Tmin_acc(i) = sqrt((10*sqrt(3)*(deltaY)/(3*segment.max_acceleration(i))));
+		maxTemp(i) = max(Tmin_acc(i),Tmin_vel(i));
+		segment.duration = maxTemp.MaxColsAtCompileTime; 
+    }
 }
 
-void TrajectoryGenerator::computeSegmentParameters([
-    [maybe_unused]] Segment& segment) {
+void TrajectoryGenerator::computeSegmentParameters(Segment& segment) {
     // TODO compute the polynomials coefficients for the current duration
+	setSegmentConstraints(last_waypoint_,target_pose_,segment);
+	computeSegmentDuration(segment); 
+    for (size_t i=0;i<6;i++){
+		auto& poly = segment.polynomials[i];
+		poly.computeCoefficients();
+    }
+	
 }
 
 TrajectoryGenerator::Segment& TrajectoryGenerator::currentSegment() {
