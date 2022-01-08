@@ -35,11 +35,6 @@ void Polynomial::computeCoefficients() {
 }
 // clang-format on
 
-double Polynomial::deltaY(){
-    double DY;
-    DY = constraints_.yf-constraints_.yi;
-    return DY;
-}
 
 //! y = ax^5 + bx^4 + cx^3 + dx^2 + ex + f
 double Polynomial::evaluate( double x) {
