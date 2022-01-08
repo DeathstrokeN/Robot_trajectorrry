@@ -164,12 +164,11 @@ void TrajectoryGenerator::computeSegmentDuration(Segment& segment) {
 	Eigen::Vector6d Tmin_vel;
     Eigen::Vector6d Tmin_acc;
     Eigen::Vector6d maxTemp;
-    double deltaY;
+    DY = constraints_.yf - constraints_.yi;
    
     for (int i = 0; i < 6; i++) {
-		deltaY = segment.polynomials[i].deltaY();
-		Tmin_vel(i) = (30*deltaY)/(16*segment.max_velocity(i));
-		Tmin_acc(i) = sqrt((10*sqrt(3)*(deltaY)/(3*segment.max_acceleration(i))));
+		Tmin_vel(i) = (30*DY)/(16*segment.max_velocity(i));
+        Tmin_acc(i) = sqrt((10 * sqrt(3) * (DY) / (3 * segment.max_acceleration(i))));
 		maxTemp(i) = std::max(Tmin_acc(i),Tmin_vel(i));
 		segment.duration = maxTemp.MaxColsAtCompileTime; 
     }
