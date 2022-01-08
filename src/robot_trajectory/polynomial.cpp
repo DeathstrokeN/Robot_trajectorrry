@@ -41,15 +41,11 @@ double Polynomial::evaluate( double x) {
     // TODO implement
 	double y;
 	
-    if (constraints_.xf>constraints_.xi && x<constraints_.xi)
-		y = constraints_.yi;
-    else if(constraints_.xf>constraints_.xi && x>constraints_.xf)
+    if ((constraints_.xf > constraints_.xi && x < constraints_.xi) || (constraints_.xf < constraints_.xi && x > constraints_.xi))
+        y = constraints_.yi;
+    else if ((constraints_.xf > constraints_.xi && x > constraints_.xf) || (constraints_.xf<constraints_.xi && x<constraints_.xi))
         y = constraints_.yf;
-    else if(constraints_.xf<constraints_.xi && x>constraints_.xi)
-        y = constraints_.yi;
-    else if(constraints_.xf<constraints_.xi && x<constraints_.xi)
-        y = constraints_.yi;
-	else	
+    else
 		y = coefficients_.a*pow(x,5) + coefficients_.b*pow(x,4) + coefficients_.c*pow(x,3) + coefficients_.d*pow(x,2) + coefficients_.e*x + coefficients_.f;
     
 	
@@ -61,15 +57,10 @@ double Polynomial::evaluateFirstDerivative(double x) {
     // TODO implement
 	double dy;
 	
-    if (constraints_.xf>constraints_.xi && x<constraints_.xi)
+    if ((constraints_.xf > constraints_.xi && x < constraints_.xi) || (constraints_.xf < constraints_.xi && x > constraints_.xi))
         dy = constraints_.yi;
-    else if(constraints_.xf>constraints_.xi && x>constraints_.xf)
+    else if ((constraints_.xf > constraints_.xi && x > constraints_.xf) || (constraints_.xf < constraints_.xi && x < constraints_.xi))
         dy = constraints_.yf;
-    else if(constraints_.xf<constraints_.xi && x>constraints_.xi)
-        dy = constraints_.yi;
-    else if(constraints_.xf<constraints_.xi && x<constraints_.xi)
-        dy = constraints_.yi;
-    
 	else
 		dy = 5*coefficients_.a*pow(x,4)+ 4*coefficients_.b*pow(x,3) + 3*coefficients_.c*pow(x,2) + coefficients_.d*pow(x,2) + coefficients_.e;
 
@@ -79,15 +70,10 @@ double Polynomial::evaluateFirstDerivative(double x) {
 //! d2y = 20ax^3 + 12bx^2 + 6cx + 2d
 double Polynomial::evaluateSecondDerivative(double x) {
 	double d2y;
-    if (constraints_.xf>constraints_.xi && x<constraints_.xi)
+    if ((constraints_.xf > constraints_.xi && x < constraints_.xi) || (constraints_.xf < constraints_.xi && x > constraints_.xi))
         d2y = constraints_.yi;
-    else if(constraints_.xf>constraints_.xi && x>constraints_.xf)
+    else if (constraints_.xf > constraints_.xi && x > constraints_.xf) || (constraints_.xf < constraints_.xi && x < constraints_.xi)
         d2y = constraints_.yf;
-    else if(constraints_.xf<constraints_.xi && x>constraints_.xi)
-		d2y = constraints_.yi;
-    else if(constraints_.xf<constraints_.xi && x<constraints_.xi)
-        d2y = constraints_.yi;
-    
 	else
 		d2y=20*coefficients_.a*pow(x,3)+ 12*coefficients_.b*pow(x,2) + 6*coefficients_.c*x + coefficients_.d*2;
 
