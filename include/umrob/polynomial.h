@@ -40,8 +40,6 @@ public:
     //! \param parameters The polynomial parameters
     void computeCoefficients();
 
-    //Added deltaY is needed to compute segment duration in src/trajectory_generator
-    double deltaY();
 
     //! \brief Evaluate the polynomial for the given input
     //!
